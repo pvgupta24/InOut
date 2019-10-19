@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from speakInOut.helper import parse_session, authentication_check, register_user
 from auth.forms import LoginForm, AccountRegisterForm
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 
 @csrf_exempt
@@ -18,5 +21,8 @@ def dashboard_view(request):
     template_data['profile'] = User.objects.get(username=request.user)
     template_data['dashboard'] = True
     if request.method == "POST":
-    	print(request.FILES)
+        vd = request.FILES.get("audiovideo", None)
+        print(type(vd))
+        path= default_storage.save('video/' + '123' + '.wav', ContentFile(vd.read()))
+        return HttpResponse(status=200)
     return render(request, 'dashboard.html', template_data)
