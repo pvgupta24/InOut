@@ -28,9 +28,10 @@
     {% if dashboard %}
     <video id="myVideo" playsinline class="video-js vjs-default-skin"></video>
     <button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button>
-    <span class="upload-comp">Uploading Complete</span>
+    <span class="upload-comp">Upload Complete</span>
     <script>
     $(document).ready(function(){
+        $('.upload-comp').hide();
         var options = {
             controls: true,
             width: 320,
@@ -93,8 +94,9 @@
                 url: serverUrl,
                 method: 'post',
                 data: formData,
-                success: function(data){
-                    if(data.success){
+                success: function(err, data){
+                    console.log(data);
+                    if(data == "success"){
                         btn.html('Re Submit');
                         $('.upload-comp').show();
                     }
