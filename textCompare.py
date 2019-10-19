@@ -1,8 +1,8 @@
 import sys
-sys.path.append('/Users/anumehaagrawal/Documents/Hacks/InOut/generateQuestion')
+sys.path.append('/Users/anumehaagrawal/Documents/Hacks/InOut/generateQuestions')
 import paralleldots
 import azure.cognitiveservices.speech as speechsdk
-from generateQuestion import main
+from generateQuestions import main
 import os
 from dotenv import load_dotenv
 load_dotenv()
