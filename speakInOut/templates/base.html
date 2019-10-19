@@ -78,23 +78,21 @@
             console.log('finished recording: ', player.recordedData);
             $('#submit').prop('disabled', false);
             $('#submit').removeClass('disable-btn');
+
         });
 
         $('#submit').on('click', function(){
             var btn = $(this);
             btn.html('Saving...').prop('disabled', true).addClass('disable-btn');
-            var myFile = new File([player.recordedData], 'audio.webm');
-            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-            var url = "{% url 'auth:dashboard' %}";
-            var data = new FormData();
-            data.append('recorded_audio', myFile);
-            data.append('csrfmiddlewaretoken', csrf);
-            console.log("Data: " + data);
+
+            var serverUrl = "{% url 'auth:dashboard' %}";
+            console.log("video " + player.recordedData);
+            var formData = new FormData();
+            formData.append('audiovideo', player.recordedData);
             $.ajax({
-                url: url,
+                url: serverUrl,
                 method: 'post',
-                headers: { "X-CSRFToken": csrf },
-                data: data,
+                data: formData,
                 success: function(data){
                     if(data.success){
                         btn.html('Re Submit');
