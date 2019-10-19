@@ -47,3 +47,5 @@ def generateQuestionsFromText(text):
         if(i%2):
             finalQuestions.append(questions[i])
     return finalQuestions
+
+print(generateQuestionsFromText("Hello I am Anu"))
