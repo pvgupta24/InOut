@@ -1,0 +1,15 @@
+body {
+    background-image: url("http://www.headstocklabs.com/wp-content/uploads/2015/03/light-grey-abstract-background-widescreen-2-1-min.jpg");
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+
+    background-size: cover;
+}
+
+.video {
+    position: absolute;
+    right: 70px;
+    bottom: 300px;
+}

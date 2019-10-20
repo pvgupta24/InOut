@@ -48,11 +48,11 @@ def analyzeFrames(videoPath=0):
             # Esc key to stop
             if cv2.waitKey(1) == 27:
                 break
-    
+    percentage = (1-looking_down/frame_count)*100
     print("Total Frames: " + str(frame_count))
     print("Negative Frames: " + str(looking_down))
-    print("Confidence: " + str((1-looking_down/frame_count)*100))
-
+    print("Confidence: " + str(percentage))
+    return percentage
 
 # Driver Code 
 if __name__ == '__main__':

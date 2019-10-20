@@ -11,6 +11,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import threading
 import subprocess
+import json
 import os
 from textCompare import *
 from eyeTrack import track
@@ -33,17 +34,10 @@ def dashboard_view(request):
 
         # task = ThreadTask()
         # task.save()
-        t = threading.Thread(target=longTask,args=[path])
+        t = threading.Thread(target=longTask,args=[path,request,name])
         t.setDaemon(True)
         t.start()
 
-        user_obj = User.objects.get(username=request.user)
-        speech_obj = Speech()
-        speech_obj.name = name
-        speech_obj.user = user_obj
-        speech_obj.video = path
-        speech_obj.audio = 'audio/' + '123' + '.wav'
-        speech_obj.save()
         return HttpResponse(status=200)
     return render(request, 'dashboard.html', template_data)
 
@@ -61,9 +55,9 @@ def dashboard_view(request):
 #     task = ThreadTask.objects.get(pk=id)
 #     return JsonResponse({'is_done':task.is_done})
 
-def longTask(video_path):
+def longTask(video_path, request,name):
     print("Analyzing ",video_path)    
-    track.analyzeFrames(video_path)
+    conf = track.analyzeFrames(video_path)
     
     print("Generating audio file")
     audio_file_name = os.path.basename(video_path).split('.')[0] + '.wav'
@@ -78,12 +72,48 @@ def longTask(video_path):
     #Generating questions from text.
     questions = generateQuestionsFromText(text_from_audio)
     print(questions)
+    final_quest = ""
+    for i in range(8):
+        if i< len(questions):
+            final_quest += questions[i]+","
 
     #Analysing filler words
     filler_percent = analyze_text.filler_percentage(text_from_audio)
     print(filler_percent)
 
+    user_obj = User.objects.get(username=request.user)
+    speech_obj = Speech()
+    speech_obj.name = name
+    speech_obj.user = user_obj
+    speech_obj.video = video_path
+    speech_obj.audio = audio_path
+    speech_obj.filler_per = filler_percent
+    speech_obj.gaze_count = conf
+    speech_obj.questions = final_quest
+    speech_obj.speech2text = text_from_audio
+    speech_obj.save()
+    request.session['video_name'] = name
     # task = ThreadTask.objects.get(pk=id)
     # task.is_done = True
     # task.save()
     # print("Finished task",id)
+
+def showAnalysis(request):
+    authentication_result = authentication_check(request)
+    if authentication_result is not None:
+        return authentication_result
+    template_data = parse_session(request)
+    # get template data from session
+    template_data['profile'] = User.objects.get(username=request.user)
+    template_data['dashboard'] = True
+    
+    name = request.session['video_name']
+    obj = Speech.objects.get(name = name, user = request.user)
+    print("Printing")
+    print(obj)
+    template_data['obj'] = obj
+    print(template_data['obj'].name)
+   
+    return render(request, "base.html", template_data)
+
+
