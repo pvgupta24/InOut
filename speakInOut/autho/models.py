@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Speech(models.Model):
+	speech_id = models.AutoField(primary_key=True)
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	name = models.CharField(blank=True, max_length=50)
 	video = models.FileField(blank=True, null=True)
