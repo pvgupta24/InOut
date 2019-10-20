@@ -9,13 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-
 import threading
 import subprocess
 import os
 from textCompare import *
 from eyeTrack import track
-
+from fillerWordAnalyzer import analyze_text
 @csrf_exempt
 def dashboard_view(request):
     # Authentication check. Users currently logged in cannot view this page.
@@ -71,9 +70,19 @@ def longTask(video_path):
     command = "ffmpeg -i " + video_path + " -ab 160k -ac 2 -ar 44100 -vn audio/" + audio_file_name
     subprocess.call(command, shell=True)
 
+    #Generating text from audio.
     audio_path = "audio/" + audio_file_name
     text_from_audio = audioTranscript(audio_path)
     print(text_from_audio)
+
+    #Generating questions from text.
+    questions = generateQuestionsFromText(text_from_audio)
+    print(questions)
+
+    #Analysing filler words
+    filler_percent = analyze_text.filler_percentage(text_from_audio)
+    print(filler_percent)
+
     # task = ThreadTask.objects.get(pk=id)
     # task.is_done = True
     # task.save()
