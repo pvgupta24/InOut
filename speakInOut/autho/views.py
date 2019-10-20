@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from speakInOut.helper import parse_session, authentication_check, register_user
-from auth.forms import LoginForm, AccountRegisterForm
+from .forms import LoginForm, AccountRegisterForm
 
 
 def setup_view(request):

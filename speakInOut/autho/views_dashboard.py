@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from speakInOut.helper import parse_session, authentication_check, register_user
-from auth.forms import LoginForm, AccountRegisterForm
+from .forms import LoginForm, AccountRegisterForm
+from .models import Speech
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
@@ -23,6 +24,11 @@ def dashboard_view(request):
     if request.method == "POST":
         vd = request.FILES.get("audiovideo", None)
         print(type(vd))
-        path= default_storage.save('video/' + '123' + '.wav', ContentFile(vd.read()))
+        path = default_storage.save('video/' + '123' + '.wav', ContentFile(vd.read()))
+        user_obj = User.objects.get(username=request.user)
+        speech_obj = Speech()
+        speech_obj.user = user_obj
+        speech_obj.video = path
+        speech_obj.save()
         return HttpResponse(status=200)
     return render(request, 'dashboard.html', template_data)

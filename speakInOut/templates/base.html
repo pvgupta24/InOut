@@ -89,11 +89,20 @@
             var serverUrl = "{% url 'auth:dashboard' %}";
             console.log("video " + player.recordedData);
             var formData = new FormData();
+            console.log(player.recordedData.video)
+            if(player.recordedData.video == undefined) {
+                videoData = player.recordedData
+            }
+            else {
+                videoData = player.recordedData.video
+            }
+
             formData.append('audiovideo', player.recordedData);
             $.ajax({
                 url: serverUrl,
                 method: 'post',
                 data: formData,
+                enctype: 'multipart/form-data',
                 success: function(err, data){
                     console.log(data);
                     if(data == "success"){
