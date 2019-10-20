@@ -66,26 +66,34 @@
         <div class="col-md-7 mt-4 ml-5 mr-5">
             <div class="text-center mb-3 mt-3">
                 <h4>Speech Analysis Results</h4>
+                {% if video_name %}
+                    <h6>Current Speech: {{ video_name }}</h6>
+                {% endif %}
             </div>
             <!--Card-->
+
+            {% if video_name %}
             <div class="card">
                 <div class="card-header bg-success">
                     Manuscript
-                    <div class="pull-right"><button class="btn btn-sm btn-info m-0">
+                    <div class="pull-right"><button class="btn btn-sm btn-info m-0" id="submitManuscript">
                         <i class="fa fa-question-circle" aria-hidden="true"></i>
-                        Ask a Question</button>
+                        Compare Manscripts?</button>
                     </div>
                 </div>
                 <!--Card content-->
+
+                
                 <div class="card-body">
-                    
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFileLangHTML">
-                        <label class="custom-file-label">
-                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload Manuscript Here</label>
-                      </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Upload Manuscript</span>
+                        </div>
+                        <textarea class="form-control" aria-label="Manuscript" id="manuscript"></textarea>
+                    </div>
                 </div>
             </div>
+            {% endif %}
             <!--/.Card-->
             <!--Card-->
             <div class="card mt-4 h-40">
@@ -289,6 +297,31 @@
                         cache: false,
                     });
                 }
+            });
+
+            $('#submitManuscript').on('click', function() {
+                var manuscript_text = $("#manuscript").val();
+                var formData = new FormData();
+                var serverUrl = "{% url 'autho:upload_manuscript' %}";
+                formData.append('manuscript_text', manuscript_text);
+                $.ajax({
+                        url: serverUrl,
+                        method: 'post',
+                        data: formData,
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        success: function(err, data) {
+                            console.log(data);
+                            if (data == "success") {
+                                alert("Uploaded");
+                                $("#manuscript").val('');
+                            } else {
+
+                            }
+                        },
+                        cache: false,
+                    });
             });
         });
     </script>

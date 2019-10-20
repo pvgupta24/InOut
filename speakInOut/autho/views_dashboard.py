@@ -16,6 +16,8 @@ import os
 from textCompare import *
 from eyeTrack import track
 from fillerWordAnalyzer import analyze_text
+
+
 @csrf_exempt
 def dashboard_view(request):
     # Authentication check. Users currently logged in cannot view this page.
@@ -31,7 +33,7 @@ def dashboard_view(request):
         name = request.POST.get("name")
         print(type(vd))
         path = default_storage.save('video/' + '123' + '.mp4', ContentFile(vd.read()))
-
+        request.session['video_name'] = name
         # task = ThreadTask()
         # task.save()
         t = threading.Thread(target=longTask,args=[path,request,name])
@@ -117,3 +119,15 @@ def showAnalysis(request):
     return render(request, "base.html", template_data)
 
 
+@csrf_exempt
+def upload_manuscript(request):
+    authentication_result = authentication_check(request)
+    if authentication_result is not None:
+        return authentication_result
+    template_data = parse_session(request)
+    video_name = template_data['video_name']
+    if request.method == 'POST':
+        speech_obj = Speech.objects.get(name=video_name)
+        speech_obj.manuscript = request.POST.get('manuscript_text')
+        speech_obj.save()
+        return HttpResponse(status=200)

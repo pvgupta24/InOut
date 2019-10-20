@@ -11,4 +11,5 @@ urlpatterns = [
 	path('register/', views.register_view, name='register'),
 	path('logout/', views.logout_view, name='logout'),
 	path('dashboard/', views_dashboard.dashboard_view, name='dashboard'),
+	path('upload_manuscript/', views_dashboard.upload_manuscript, name='upload_manuscript'),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
