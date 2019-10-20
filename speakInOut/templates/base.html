@@ -20,6 +20,7 @@
 
 <body>
     {% block body %} {% endblock %} {% if dashboard %}
+    <input type="text" name="video-name" id="video-name" required>
     <video id="myVideo" playsinline class="video-js vjs-default-skin"></video>
     <button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button>
     <span class="upload-comp">Upload Complete</span>
@@ -70,6 +71,7 @@
             player.on('finishRecord', function() {
                 // the blob object contains the recorded data that
                 // can be downloaded by the user, stored on server etc.
+                console.log($('#video-name').val());
                 console.log('finished recording: ', player.recordedData);
                 $('#submit').prop('disabled', false);
                 $('#submit').removeClass('disable-btn');
@@ -77,38 +79,44 @@
             });
 
             $('#submit').on('click', function() {
-                var btn = $(this);
-                btn.html('Saving...').prop('disabled', true).addClass('disable-btn');
+                if($('#video-name').val() != ""){
+                    console.log($('#video-name').val())
+                    var btn = $(this);
+                    btn.html('Saving...').prop('disabled', true).addClass('disable-btn');
 
-                var serverUrl = "{% url 'auth:dashboard' %}";
-                console.log("video " + player.recordedData);
-                console.log(player.recordedData);
-                var formData = new FormData();
-                if(player.recordedData.video == undefined) {
-                    videoData = player.recordedData
+                    var serverUrl = "{% url 'auth:dashboard' %}";
+                    var nameOfVideo = $("#video-name").val();
+                    console.log("video " + player.recordedData);
+                    console.log(player.recordedData);
+                    var formData = new FormData();
+
+                    if(player.recordedData.video == undefined) {
+                        videoData = player.recordedData
+                    }
+                    else {
+                        videoData = player.recordedData.video
+                    }
+                    formData.append('audiovideo', videoData);
+                    formData.append('name', nameOfVideo);
+                    $.ajax({
+                        url: serverUrl,
+                        method: 'post',
+                        data: formData,
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        success: function(err, data) {
+                            console.log(data);
+                            if (data == "success") {
+                                btn.html('Re Submit');
+                                $('.upload-comp').show();
+                            } else {
+                                btn.html('Error').prop('disabled', false).removeClass('disable-btn');
+                            }
+                        },
+                        cache: false,
+                    });
                 }
-                else {
-                    videoData = player.recordedData.video
-                }
-                formData.append('audiovideo', videoData);
-                $.ajax({
-                    url: serverUrl,
-                    method: 'post',
-                    data: formData,
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    contentType: false,
-                    success: function(err, data) {
-                        console.log(data);
-                        if (data == "success") {
-                            btn.html('Re Submit');
-                            $('.upload-comp').show();
-                        } else {
-                            btn.html('Error').prop('disabled', false).removeClass('disable-btn');
-                        }
-                    },
-                    cache: false,
-                });
             });
         });
     </script>

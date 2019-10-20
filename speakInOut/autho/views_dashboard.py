@@ -28,6 +28,7 @@ def dashboard_view(request):
     template_data['dashboard'] = True
     if request.method == "POST":
         vd = request.FILES.get("audiovideo", None)
+        name = request.POST.get("name")
         print(type(vd))
         path = default_storage.save('video/' + '123' + '.mp4', ContentFile(vd.read()))
 
@@ -39,8 +40,10 @@ def dashboard_view(request):
 
         user_obj = User.objects.get(username=request.user)
         speech_obj = Speech()
+        speech_obj.name = name
         speech_obj.user = user_obj
         speech_obj.video = path
+        speech_obj.audio = 'audio/' + '123' + '.wav'
         speech_obj.save()
         return HttpResponse(status=200)
     return render(request, 'dashboard.html', template_data)
