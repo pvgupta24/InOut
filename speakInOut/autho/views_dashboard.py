@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from speakInOut.helper import parse_session, authentication_check, register_user
@@ -10,6 +10,11 @@ from django.http import HttpResponse
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+import threading
+import subprocess
+import os
+
+from eyeTrack import track
 
 @csrf_exempt
 def dashboard_view(request):
@@ -25,6 +30,13 @@ def dashboard_view(request):
         vd = request.FILES.get("audiovideo", None)
         print(type(vd))
         path = default_storage.save('video/' + '123' + '.wav', ContentFile(vd.read()))
+
+        # task = ThreadTask()
+        # task.save()
+        t = threading.Thread(target=longTask,args=[path])
+        t.setDaemon(True)
+        t.start()
+
         user_obj = User.objects.get(username=request.user)
         speech_obj = Speech()
         speech_obj.user = user_obj
@@ -32,3 +44,31 @@ def dashboard_view(request):
         speech_obj.save()
         return HttpResponse(status=200)
     return render(request, 'dashboard.html', template_data)
+
+
+# def startThreadTask(request):
+#     task = ThreadTask()
+#     task.save()
+#     t = threading.Thread(target=longTask,args=[task.id])
+#     t.setDaemon(True)
+#     t.start()
+#     return JsonResponse({'id':task.id})
+
+# # Check status of long tash
+# def checkThreadTask(request,id):
+#     task = ThreadTask.objects.get(pk=id)
+#     return JsonResponse({'is_done':task.is_done})
+
+def longTask(video_path):
+    print("Analyzing ",video_path)    
+    track.analyzeFrames(video_path)
+    
+    print("Generating audio file")
+    audio_file_name = os.path.basename(video_path).split('.')[0] + '.wav'
+    command = "ffmpeg -i " + video_path + " -ab 160k -ac 2 -ar 44100 -vn audio/" + audio_file_name
+    subprocess.call(command, shell=True)
+
+    # task = ThreadTask.objects.get(pk=id)
+    # task.is_done = True
+    # task.save()
+    # print("Finished task",id)

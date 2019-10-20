@@ -1,10 +1,10 @@
 import cv2
-from gaze_tracking import GazeTracking
+from .gaze_tracking import GazeTracking
 
 
 def analyzeFrames(videoPath=0):
     gaze = GazeTracking()
-    video_stream = cv2.VideoCapture(0)
+    video_stream = cv2.VideoCapture(videoPath)
     frame_count = 0
     looking_down = 0
     
@@ -34,19 +34,20 @@ def analyzeFrames(videoPath=0):
                 looking_down += 1             
             elif gaze.is_vertical_center():
                 text = "Looking center"
-    
-        cv2.putText(frame, text, (90, 60), cv2.FONT_HERSHEY_DUPLEX, 1.6, (147, 58, 31), 2)
-    
-        left_pupil = gaze.pupil_left_coords()
-        right_pupil = gaze.pupil_right_coords()
-        cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
-        cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
-    
-        cv2.imshow("Demo", frame)
-    
-        # Esc key to stop
-        if cv2.waitKey(1) == 27:
-            break
+
+        if videoPath == '0':
+            cv2.putText(frame, text, (90, 60), cv2.FONT_HERSHEY_DUPLEX, 1.6, (147, 58, 31), 2)
+        
+            left_pupil = gaze.pupil_left_coords()
+            right_pupil = gaze.pupil_right_coords()
+            cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
+            cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
+        
+            cv2.imshow("Demo", frame)
+        
+            # Esc key to stop
+            if cv2.waitKey(1) == 27:
+                break
     
     print("Total Frames: " + str(frame_count))
     print("Negative Frames: " + str(looking_down))
@@ -54,5 +55,6 @@ def analyzeFrames(videoPath=0):
 
 
 # Driver Code 
-if __name__ == '__main__': 
+if __name__ == '__main__':
+
   analyzeFrames()
