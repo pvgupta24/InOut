@@ -129,5 +129,6 @@ def upload_manuscript(request):
     if request.method == 'POST':
         speech_obj = Speech.objects.get(name=video_name)
         speech_obj.manuscript = request.POST.get('manuscript_text')
+        speech_obj.text_sim = compareTranscripts(speech_obj.speech2text,speech_obj.manuscript)*100
         speech_obj.save()
         return HttpResponse(status=200)
