@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from speakInOut.helper import parse_session, authentication_check, register_user
-from auth.forms import LoginForm, AccountRegisterForm
+from .forms import LoginForm, AccountRegisterForm
+from .models import Speech
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
@@ -12,7 +13,7 @@ from django.core.files.base import ContentFile
 import threading
 import subprocess
 import os
-
+from textCompare import *
 from eyeTrack import track
 
 @csrf_exempt
@@ -26,11 +27,8 @@ def dashboard_view(request):
     template_data['profile'] = User.objects.get(username=request.user)
     template_data['dashboard'] = True
     if request.method == "POST":
-        print(request.FILES)
-        print(len(request.FILES))
-        vd = request.FILES.get("audiovideo")
+        vd = request.FILES.get("audiovideo", None)
         print(type(vd))
-        # print(default_storage)
         path = default_storage.save('video/' + '123' + '.mp4', ContentFile(vd.read()))
 
         # task = ThreadTask()
@@ -38,6 +36,12 @@ def dashboard_view(request):
         t = threading.Thread(target=longTask,args=[path])
         t.setDaemon(True)
         t.start()
+
+        user_obj = User.objects.get(username=request.user)
+        speech_obj = Speech()
+        speech_obj.user = user_obj
+        speech_obj.video = path
+        speech_obj.save()
         return HttpResponse(status=200)
     return render(request, 'dashboard.html', template_data)
 
@@ -64,6 +68,9 @@ def longTask(video_path):
     command = "ffmpeg -i " + video_path + " -ab 160k -ac 2 -ar 44100 -vn audio/" + audio_file_name
     subprocess.call(command, shell=True)
 
+    audio_path = "audio/" + audio_file_name
+    text_from_audio = audioTranscript(audio_path)
+    print(text_from_audio)
     # task = ThreadTask.objects.get(pk=id)
     # task.is_done = True
     # task.save()

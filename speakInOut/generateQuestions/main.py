@@ -1,10 +1,10 @@
-import aqgFunction
+from .aqgFunction import *
 
 
 # Main Function
 def getAnswers(inputText):
     # Create AQG object
-    aqg = aqgFunction.AutomaticQuestionGenerator()
+    aqg = AutomaticQuestionGenerator()
 
     # inputTextPath = "/Users/anumehaagrawal/Documents/Hacks/InOut/sample.txt"
     # readFile = open(inputTextPath, 'r+', encoding="utf8")

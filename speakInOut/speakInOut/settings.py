@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'auth.apps.AuthConfig',
+    'autho.apps.AuthoConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +65,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries':{
-                'app_filters': 'auth.templatetags.app_filters',
+                'app_filters': 'autho.templatetags.app_filters',
             }
         },
     },

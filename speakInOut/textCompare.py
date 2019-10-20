@@ -1,5 +1,3 @@
-import sys
-sys.path.append('/Users/anumehaagrawal/Documents/Hacks/InOut/generateQuestions')
 import paralleldots
 import azure.cognitiveservices.speech as speechsdk
 from generateQuestions import main
@@ -47,5 +45,3 @@ def generateQuestionsFromText(text):
         if(i%2):
             finalQuestions.append(questions[i])
     return finalQuestions
-
-print(generateQuestionsFromText("Hello I am Anu"))

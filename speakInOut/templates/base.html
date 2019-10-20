@@ -24,8 +24,8 @@
     <button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button>
     <span class="upload-comp">Upload Complete</span>
     <script>
-        $(document).ready(function() {
-            $('.upload-comp').hide();
+    $(document).ready(function(){
+        $('.upload-comp').hide();
             var options = {
                 controls: true,
                 width: 320,
@@ -38,8 +38,8 @@
                         maxLength: 20,
                         debug: true
                     }
-                }
-            };
+            }
+        };
 
             // apply some workarounds for opera browser
             applyVideoWorkaround();
@@ -84,7 +84,13 @@
                 console.log("video " + player.recordedData);
                 console.log(player.recordedData);
                 var formData = new FormData();
-                formData.append('audiovideo', player.recordedData.video);
+                if(player.recordedData.video == undefined) {
+                    videoData = player.recordedData
+                }
+                else {
+                    videoData = player.recordedData.video
+                }
+                formData.append('audiovideo', videoData);
                 $.ajax({
                     url: serverUrl,
                     method: 'post',
