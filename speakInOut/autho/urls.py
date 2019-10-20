@@ -12,4 +12,5 @@ urlpatterns = [
 	path('logout/', views.logout_view, name='logout'),
 	path('dashboard/', views_dashboard.dashboard_view, name='dashboard'),
 	path('upload_manuscript/', views_dashboard.upload_manuscript, name='upload_manuscript'),
+	path('analyze/', views_dashboard.show_analysis, name="analysis")
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
