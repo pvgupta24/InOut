@@ -374,4 +374,36 @@
     </script>
     {% endif %}
 
+    {% if myvideos %}
+    <!-- Navbar -->
+    <nav class="container-fluid pl-3 navbar navbar-light bg-light lighten-1">
+        <!-- <a class="navbar-brand" href="#"> -->
+        <img src="{% static 'img/logo.jpeg' %}" height="50" class="d-inline-block align-top" alt="logo">
+        <!-- </a> -->
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+
+            <li class="nav-item dropdown">
+                <!-- <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+              </a> -->
+
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0"
+                        alt="avatar image" height="35">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                    aria-labelledby="navbarDropdownMenuLink-333">
+                    <a class="dropdown-item">{{profile}} <i class="text-right fa fa-user"></i></a>
+                    <a class="dropdown-item" href="/logout">Sign Out <i class="text-right fa fa-sign-out"></i></a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    {% block main_table %}
+    {% endblock %}
+
+    {% endif %}
 </html>

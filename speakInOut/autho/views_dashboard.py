@@ -116,7 +116,7 @@ def show_analysis(request):
     template_data['obj'].generated_questions_string = obj.generated_questions.split(",")
     print(template_data['obj'].name)
    
-    return render(request, "dashboard.html", template_data)
+    return render(request, 'dashboard.html', template_data)
 
 
 @csrf_exempt
@@ -132,3 +132,14 @@ def upload_manuscript(request):
         speech_obj.text_sim = compareTranscripts(speech_obj.speech2text,speech_obj.manuscript)*100
         speech_obj.save()
         return HttpResponse(status=200)
+
+
+def myvideos(request):
+    authentication_result = authentication_check(request)
+    if authentication_result is not None:
+        return authentication_result
+    template_data = parse_session(request)
+    template_data['myvideos'] = True
+    all_speeches = Speech.objects.filter(user=request.user)
+    template_data['videos'] = all_speeches
+    return render(request, 'myvideos.html', template_data)
