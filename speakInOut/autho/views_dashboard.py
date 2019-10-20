@@ -41,7 +41,14 @@ def dashboard_view(request):
         t.start()
 
         return HttpResponse(status=200)
-    return render(request, 'dashboard.html', template_data)
+    else:
+        name = request.session['video_name']
+        obj = Speech.objects.get(name = name, user = request.user)
+        print("Printing")
+        print(obj)
+        template_data['obj'] = obj
+        print(template_data['obj'].name)
+        return render(request, 'dashboard.html', template_data)
 
 
 # def startThreadTask(request):
