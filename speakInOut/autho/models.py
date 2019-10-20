@@ -16,6 +16,10 @@ class Speech(models.Model):
 	audio = models.FileField(blank=True, null=True)
 	manuscript = models.CharField(blank=True, null=True, max_length=500)
 	speech2text = models.CharField(blank=True, null=True, max_length=500)
+	gaze_count = models.FloatField(default=0.0)
+	text_sim = models.FloatField(default=0.0)
+	generated_questions = models.TextField(blank=True, null=True)
+	filler_per = models.FloatField(default=0.0)
 
 	def save(self, *args, **kwargs):
 		self.slug = slugify.slugify(self.name)
