@@ -2,34 +2,39 @@
 {% load static %} {% block body %}
 {% endblock %}
 {% block main_table %}
-<table class="table table-dark">
+<div class="row wow fadeIn">
+	<div class="col-md-7 mt-4 ml-5 mr-5">
+        <div class="text-center mb-3 mt-3">
+            <h4>My Videos</h4>
+        </div>
+    </div>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Name</th>
+      <th scope="col">Manuscript</th>
+      <th scope="col">speech2text</th>
+      <th scope="col">gaze_count</th>
+      <th scope="col">Text Similarity</th>
+      <th scope="col">Generated Questions</th>
+      <th scope="col">Filler Percentage</th>
     </tr>
   </thead>
  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
+ 	{% for video in videos %}
+ 		<tr>
+ 			<td>{{ forloop.counter }}</td>
+ 			<td>{{ video.name }}</td>
+ 			<td>{{ video.manuscript }}</td>
+ 			<td>{{ video.speech2text }}</td>
+ 			<td>{{ video.gaze_count }}</td>
+ 			<td>{{ video.text_sim }}</td>
+ 			<td>{{ video.generated_questions }}</td>
+ 			<td>{{ video.filler_per }}</td>
+ 		</tr>
+ 	{% endfor %}
   </tbody>
 </table>
 {% endblock %}
