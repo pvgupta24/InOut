@@ -78,20 +78,18 @@
                     Manuscript
                     <div class="pull-right"><button class="btn btn-sm btn-info m-0" id="submitManuscript">
                         <i class="fa fa-question-circle" aria-hidden="true"></i>
-                        Compare Manscripts?</button>
+                        Compare Manuscripts?</button>
                         
                     </div>
                 </div>
                 <!--Card content-->
-
-                
                 <div class="card-body">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Upload Manuscript</span>
-                        </div>
-                        <textarea class="form-control" aria-label="Manuscript" id="manuscript"></textarea>
-                    </div>
+                    <!--Textarea with icon prefix-->
+                    <div class="md-form">
+                        <i class="fa fa-pencil prefix"></i>
+                        <textarea  id="manuscript" class="md-textarea form-control"></textarea>
+                        <label for="manuscript">Icon Prefix</label>
+                      </div>
                 </div>
             </div>
             {% endif %}
@@ -121,6 +119,7 @@
                 <!--Card content-->
                 <div class="card-body">
                     Speech Analysis Percentages
+                </div>
 
                     <!--/.Card-->
                     <div class="progress md-progress mb-4 mt-2" style="height: 20px">
@@ -220,8 +219,8 @@
 
 
     <!-- <video id="myVideo" playsinline class="video-js vjs-default-skin"></video> -->
-    <button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button>
-    <span class="upload-comp">Upload Complete</span>
+    <!-- <button class="audio-btn strt disable-btn" id="submit" disabled>Submit</button> -->
+    <!-- <span class="upload-comp">Upload Complete</span> -->
     <script>
         $(document).ready(function () {
             $('.upload-comp').hide();
