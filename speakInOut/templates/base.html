@@ -92,10 +92,20 @@
                 <div class="card-header bg-info">Transcription</div>
                 <!--Card content-->
                 <div class="card-body">
-                    Speech to Text results will appear here
+                    Speech to Text results will appear here <br>
+                    {{obj.speech2text}}
                 </div>
             </div>
             <!--/.Card-->
+            <div class="card mt-4 h-40">
+                    <div class="card-header bg-info">Follow up Questions</div>
+                    <!--Card content-->
+                    <div class="card-body">
+                        {% for q in obj.generated_questions_string %}
+                        {{q}} <br>
+                        {% endfor %}
+                    </div>
+                </div>
 
             <!--Card-->
             <div class="card mt-4">
@@ -105,12 +115,16 @@
 
                     <!--/.Card-->
                     <div class="progress md-progress mb-4 mt-2" style="height: 20px">
-                        <div class="progress-bar" role="progressbar" style="width: 25%; height: 20px" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100">Gaze Confidence: 25%</div>
+                        <div class="progress-bar" role="progressbar" style="width: {{obj.gaze_count}}%; height: 20px" aria-valuenow="{{obj.gaze_count}}"
+                            aria-valuemin="0" aria-valuemax="100">Gaze Confidence: {{obj.gaze_count}}%</div>
                     </div>
                     <div class="progress md-progress mb-4 " style="height: 20px">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%; height: 20px"
-                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Text Similarity: 75%</div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{obj.text_sim}}%; height: 20px"
+                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Text Similarity: {{obj.text_sim}}%</div>
+                    </div>
+                    <div class="progress md-progress mb-4 " style="height: 20px">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{obj.filler_per}}%; height: 20px;"
+                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Filler words: {{obj.filler_per}}%</div>
                     </div>
                 </div>
             </div>
@@ -135,9 +149,11 @@
                     <button class="btn btn-primary btn-sm w-100 audio-btn strt disable-btn" id="submit" disabled>
                         Upload <i class="fa fa-upload"></i>
                     </button>
-                    <button class="btn btn-success btn-sm w-100" type="submit">
-                        Analyze <i class="fa fa-search"></i>
-                    </button>
+                    <form action="/analyze" method="GET">
+                        <button class="btn btn-success btn-sm w-100" type="submit">
+                            Analyze <i class="fa fa-search"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
             <!--/.Card-->

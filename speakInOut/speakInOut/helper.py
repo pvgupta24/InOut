@@ -14,8 +14,8 @@ def parse_session(request, template_data=None):
     """
     if template_data is None:
         template_data = {}
-    # if request.session.has_key('alert_success'):
-    #     template_data['alert_success'] = request.session.get('alert_success')
+    if request.session.has_key('video_name'):
+        template_data['video_name'] = request.session.get('video_name')
     #     del request.session['alert_success']
     # if request.session.has_key('alert_danger'):
     #     template_data['alert_danger'] = request.session.get('alert_danger')

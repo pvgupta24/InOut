@@ -31,7 +31,7 @@ def dashboard_view(request):
         name = request.POST.get("name")
         print(type(vd))
         path = default_storage.save('video/' + '123' + '.mp4', ContentFile(vd.read()))
-
+        request.session['video_name'] = name
         # task = ThreadTask()
         # task.save()
         t = threading.Thread(target=longTask,args=[path,request,name])
@@ -76,7 +76,7 @@ def longTask(video_path, request,name):
     for i in range(8):
         if i< len(questions):
             final_quest += questions[i]+","
-
+    print("Final questions is" + final_quest)
     #Analysing filler words
     filler_percent = analyze_text.filler_percentage(text_from_audio)
     print(filler_percent)
@@ -89,16 +89,15 @@ def longTask(video_path, request,name):
     speech_obj.audio = audio_path
     speech_obj.filler_per = filler_percent
     speech_obj.gaze_count = conf
-    speech_obj.questions = final_quest
+    speech_obj.generated_questions = final_quest
     speech_obj.speech2text = text_from_audio
     speech_obj.save()
-    request.session['video_name'] = name
     # task = ThreadTask.objects.get(pk=id)
     # task.is_done = True
     # task.save()
     # print("Finished task",id)
 
-def showAnalysis(request):
+def show_analysis(request):
     authentication_result = authentication_check(request)
     if authentication_result is not None:
         return authentication_result
@@ -107,13 +106,14 @@ def showAnalysis(request):
     template_data['profile'] = User.objects.get(username=request.user)
     template_data['dashboard'] = True
     
-    name = request.session['video_name']
+    name = template_data['video_name']
     obj = Speech.objects.get(name = name, user = request.user)
     print("Printing")
     print(obj)
     template_data['obj'] = obj
+    template_data['obj'].generated_questions_string = obj.generated_questions.split(",")
     print(template_data['obj'].name)
    
-    return render(request, "base.html", template_data)
+    return render(request, "dashboard.html", template_data)
 
 
