@@ -1,9 +1,9 @@
 import spacy
-import clause
-import nonClause
-import identification
-import questionValidation
-from nlpNER import nerTagger
+from .clause import *
+from .nonClause import *
+from .identification import *
+from .questionValidation import *
+from .nlpNER import nerTagger
 
 
 class AutomaticQuestionGenerator():

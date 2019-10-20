@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile
 import threading
 import subprocess
 import os
-
+from textCompare import *
 from eyeTrack import track
 
 @csrf_exempt
@@ -29,7 +29,7 @@ def dashboard_view(request):
     if request.method == "POST":
         vd = request.FILES.get("audiovideo", None)
         print(type(vd))
-        path = default_storage.save('video/' + '123' + '.wav', ContentFile(vd.read()))
+        path = default_storage.save('video/' + '123' + '.mp4', ContentFile(vd.read()))
 
         # task = ThreadTask()
         # task.save()
@@ -68,6 +68,9 @@ def longTask(video_path):
     command = "ffmpeg -i " + video_path + " -ab 160k -ac 2 -ar 44100 -vn audio/" + audio_file_name
     subprocess.call(command, shell=True)
 
+    audio_path = "audio/" + audio_file_name
+    text_from_audio = audioTranscript(audio_path)
+    print(text_from_audio)
     # task = ThreadTask.objects.get(pk=id)
     # task.is_done = True
     # task.save()
