@@ -20,6 +20,7 @@ from fillerWordAnalyzer import analyze_text
 
 @csrf_exempt
 def dashboard_view(request):
+
     # Authentication check. Users currently logged in cannot view this page.
     authentication_result = authentication_check(request)
     if authentication_result is not None:
@@ -41,14 +42,8 @@ def dashboard_view(request):
         t.start()
 
         return HttpResponse(status=200)
-    else:
-        name = request.session['video_name']
-        obj = Speech.objects.get(name = name, user = request.user)
-        print("Printing")
-        print(obj)
-        template_data['obj'] = obj
-        print(template_data['obj'].name)
-        return render(request, 'dashboard.html', template_data)
+   
+    return render(request, 'dashboard.html', template_data)
 
 
 # def startThreadTask(request):
