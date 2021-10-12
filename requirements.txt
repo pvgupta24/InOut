@@ -10,7 +10,7 @@ idna==2.8
 murmurhash==1.0.2
 nltk==3.4.5
 numpy==1.16.1
-opencv-python==3.4.5.20
+opencv-python==4.2.0.32
 ParallelDots==3.2.13
 plac==0.9.6
 preshed==3.0.2
