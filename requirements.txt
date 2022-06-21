@@ -9,7 +9,7 @@ en-core-web-md==2.2.0
 idna==2.8
 murmurhash==1.0.2
 nltk==3.4.5
-numpy==1.16.1
+numpy==1.22.0
 opencv-python==3.4.5.20
 ParallelDots==3.2.13
 plac==0.9.6
